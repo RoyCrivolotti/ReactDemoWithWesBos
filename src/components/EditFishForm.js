@@ -14,7 +14,14 @@ class EditFishForm extends React.Component {
 
 	componentDidMount() {
 		console.log('mounted');
-		console.log(this.props);
+		console.log(`List of elements: ${this.props.fishes}`);
+	}
+
+	componentDidUpdate() {
+		console.log('update');
+		console.log(`List of elements: ${this.props.fishes}`);
+		// console.log(this.state.name);
+
 		// const defaultFish = this.props.fishes[0].fish;
 		// const defaultFishKey = this.props.fishes[0].key;
 		// this.setState({ key: defaultFishKey });
