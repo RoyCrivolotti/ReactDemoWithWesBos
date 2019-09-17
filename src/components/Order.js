@@ -1,10 +1,16 @@
 import React from 'react';
 import { formatPrice } from '../helpers';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 class Order extends React.Component {
 	renderListItem = key => {
 		const fish = this.props.fishes[key];
 		const amount = this.props.order[key];
+		const transitionOptions = {
+			classNames: 'order',
+			key,
+			timeout: { enter: 500, exit: 500 },
+		};
 
 		// Confirm elements were loaded before rendering them
 		if (!fish) return null;
@@ -14,20 +20,35 @@ class Order extends React.Component {
 
 		if (isUnavailable) {
 			return (
-				<li key={key} className='fish'>
-					{`Sorry, ${fish ? fish.name : 'this product'} is no longer
-					available`}
-				</li>
+				<CSSTransition {...transitionOptions}>
+					<li key={key}>
+						Sorry, {fish ? fish.name : 'this product'} is no longer
+						available
+					</li>
+				</CSSTransition>
 			);
 		}
 
 		return (
-			<li key={key} className='fish'>
-				{amount} {fish.name} - {formatPrice(amount * fish.price)}
-				<button onClick={() => this.props.removeFromOrder(key)}>
-					&#10799;
-				</button>
-			</li>
+			<CSSTransition {...transitionOptions}>
+				<li key={key}>
+					<span>
+						<TransitionGroup component='span' className='count'>
+							<CSSTransition
+								classNames='count'
+								key={amount}
+								timeout={{ enter: 500, exit: 500 }}
+							>
+								<span>{amount} -&nbsp;</span>
+							</CSSTransition>
+						</TransitionGroup>
+						{fish.name} - {formatPrice(amount * fish.price)}
+					</span>
+					<button onClick={() => this.props.removeFromOrder(key)}>
+						<span>&#10799;</span>
+					</button>
+				</li>
+			</CSSTransition>
 		);
 	};
 
@@ -51,7 +72,9 @@ class Order extends React.Component {
 		return (
 			<div className='order-wrap'>
 				<h2>Order</h2>
-				<ul className='order'>{orderIds.map(this.renderListItem)}</ul>
+				<TransitionGroup component='ul' className='order'>
+					{orderIds.map(this.renderListItem)}
+				</TransitionGroup>
 				<div className='total'>
 					Total <strong>{formatPrice(total)}</strong>
 				</div>
