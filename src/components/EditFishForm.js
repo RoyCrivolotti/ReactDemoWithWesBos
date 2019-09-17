@@ -4,7 +4,7 @@ import { formatPrice } from '../helpers';
 
 class EditFishForm extends React.Component {
 	state = {
-		fishToEdit: {},
+		key: {},
 		name: {},
 		description: {},
 		status: {},
@@ -17,7 +17,7 @@ class EditFishForm extends React.Component {
 		let fishToEdit = this.props.fishes.find(el => el.key === fishToEditKey)
 			.fish;
 
-		this.setState({ fishToEdit: fishToEditKey });
+		this.setState({ key: fishToEditKey });
 		this.setState({ name: fishToEdit.name });
 		this.setState({ description: fishToEdit.description });
 		this.setState({ status: fishToEdit.status });
@@ -26,19 +26,15 @@ class EditFishForm extends React.Component {
 	};
 
 	handleChange = event => {
-		let fishElement = {
-			...this.props.fishes.find(el => el.key === this.state.fishToEdit),
-		};
-		const updatedFish = {
-			fish: fishElement.fish,
-			[event.currentTarget.name]: event.currentTarget.value,
+		let updatedFish = {
+			...this.props.fishes.find(el => el.key === this.state.key).fish,
 		};
 
-		// this.props.updateFish(this.props.index, updatedFish);
+		updatedFish[event.currentTarget.name] = event.currentTarget.value;
+		this.props.updateFish(this.state.key, updatedFish);
 	};
 
-	renderBasedOnInput(fishToRender) {
-		console.log(this.props.fishes);
+	renderBasedOnInput() {
 		if (this.props.fishes.length === 0) return null;
 
 		return (
