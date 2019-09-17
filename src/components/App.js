@@ -55,6 +55,12 @@ class App extends React.Component {
 		this.setState({ fishes });
 	};
 
+	removeFish = key => {
+		const fishes = { ...this.state.fishes };
+		fishes[key] = null;
+		this.setState({ fishes });
+	};
+
 	addToOrder = key => {
 		const order = { ...this.state.order };
 		const isAvailable =
@@ -80,6 +86,7 @@ class App extends React.Component {
 					fishes={this.state.fishes}
 					addFish={this.addFish}
 					updateFish={this.updateFish}
+					removeFish={this.removeFish}
 					loadSampleFishes={this.loadSampleFishes}
 				/>
 			</div>

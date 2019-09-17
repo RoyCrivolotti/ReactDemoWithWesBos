@@ -110,6 +110,9 @@ class EditFishForm extends React.Component {
 					onChange={this.handleChange}
 					value={this.state.image}
 				/>
+				<button onClick={() => this.props.removeFish(this.state.key)}>
+					Remove fish
+				</button>
 			</div>
 		);
 	}
