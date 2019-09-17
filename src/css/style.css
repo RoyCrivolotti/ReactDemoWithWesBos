@@ -436,6 +436,14 @@ ul.order li span.count {
 ul.order li span.count span {
 	display: inline-block;
 }
+ul.order li.fish button {
+	display: block;
+	opacity: 0;
+	font-size: 2.5rem;
+}
+ul.order li.fish:hover button {
+	opacity: 1;
+}
 .order-title {
 	text-align: center;
 }
@@ -524,6 +532,9 @@ ul.order li span.count span {
 	float: left;
 	width: 10vw;
 	margin-right: 1rem;
+}
+.menu-fish button:last-of-type {
+	margin-left: 2em;
 }
 button,
 input[type='submit'] {

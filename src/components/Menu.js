@@ -15,6 +15,7 @@ class Menu extends React.Component {
 							index={key}
 							data={this.props.fishes[key]}
 							addToOrder={this.props.addToOrder}
+							removeFromOrder={this.props.removeFromOrder}
 						></Fish>
 					))}
 				</ul>

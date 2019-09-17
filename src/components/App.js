@@ -61,6 +61,22 @@ class App extends React.Component {
 		this.setState({ fishes });
 	};
 
+	removeFromOrder = key => {
+		const order = { ...this.state.order };
+
+		if (!order[key]) return;
+
+		if (order[key] === 1) {
+			delete order[key];
+			localStorage.setItem(
+				this.props.match.params.storeId,
+				JSON.stringify(this.state.order),
+			);
+		} else order[key] = order[key] === 1 ? null : order[key] - 1;
+
+		this.setState({ order });
+	};
+
 	addToOrder = key => {
 		const order = { ...this.state.order };
 		const isAvailable =
@@ -80,8 +96,13 @@ class App extends React.Component {
 					fishes={this.state.fishes}
 					tagline={this.state.tagline}
 					addToOrder={this.addToOrder}
+					removeFromOrder={this.removeFromOrder}
 				/>
-				<Order fishes={this.state.fishes} order={this.state.order} />
+				<Order
+					fishes={this.state.fishes}
+					order={this.state.order}
+					removeFromOrder={this.removeFromOrder}
+				/>
 				<Inventory
 					fishes={this.state.fishes}
 					addFish={this.addFish}
