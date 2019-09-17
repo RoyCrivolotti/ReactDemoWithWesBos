@@ -13,23 +13,28 @@ class EditFishForm extends React.Component {
 	};
 
 	componentDidMount() {
-		console.log('mounted');
-		console.log(`List of elements: ${this.props.fishes}`);
+		if (this.props.fishes.length === 0) {
+			this.setState({ key: '' });
+			this.setState({ name: '' });
+			this.setState({ description: '' });
+			this.setState({ status: '' });
+			this.setState({ price: 0 });
+			this.setState({ image: '' });
+		}
 	}
 
-	componentDidUpdate() {
-		console.log('update');
-		console.log(`List of elements: ${this.props.fishes}`);
-		// console.log(this.state.name);
+	UNSAFE_componentWillReceiveProps(nextProps) {
+		if (nextProps.fishes.length > 0) {
+			const defaultFish = nextProps.fishes[0].fish;
+			const defaultFishKey = nextProps.fishes[0].key;
 
-		// const defaultFish = this.props.fishes[0].fish;
-		// const defaultFishKey = this.props.fishes[0].key;
-		// this.setState({ key: defaultFishKey });
-		// this.setState({ name: defaultFish.name });
-		// this.setState({ description: defaultFish.description });
-		// this.setState({ status: defaultFish.status });
-		// this.setState({ price: defaultFish.price });
-		// this.setState({ image: defaultFish.image });
+			this.setState({ key: defaultFishKey });
+			this.setState({ name: defaultFish.name });
+			this.setState({ description: defaultFish.description });
+			this.setState({ status: defaultFish.status });
+			this.setState({ price: defaultFish.price });
+			this.setState({ image: defaultFish.image });
+		}
 	}
 
 	renderFishToEdit = event => {
@@ -48,9 +53,9 @@ class EditFishForm extends React.Component {
 	handleChange = event => {
 		let updatedFish = {
 			...this.props.fishes.find(el => el.key === this.state.key).fish,
+			[event.currentTarget.name]: event.currentTarget.value,
 		};
 
-		updatedFish[event.currentTarget.name] = event.currentTarget.value;
 		this.props.updateFish(this.state.key, updatedFish);
 	};
 
@@ -68,20 +73,24 @@ class EditFishForm extends React.Component {
 				</select>
 
 				<input
+					key={this.state.key}
 					type='text'
 					name='name'
+					ref={this.keyRef}
 					onChange={this.handleChange}
 					value={this.state.name}
 				/>
 				<input
 					type='text'
 					name='price'
+					ref={this.priceRef}
 					onChange={this.handleChange}
 					value={formatPrice(this.state.price)}
 				/>
 				<select
 					type='text'
 					name='status'
+					ref={this.statusRef}
 					onChange={this.handleChange}
 					value={this.state.status}
 				>
@@ -90,12 +99,14 @@ class EditFishForm extends React.Component {
 				</select>
 				<textarea
 					name='description'
+					ref={this.descriptionRef}
 					onChange={this.handleChange}
 					value={this.state.description}
 				/>
 				<input
 					type='text'
 					name='image'
+					ref={this.imageRef}
 					onChange={this.handleChange}
 					value={this.state.image}
 				/>
