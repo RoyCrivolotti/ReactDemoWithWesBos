@@ -12,6 +12,19 @@ class EditFishForm extends React.Component {
 		image: {},
 	};
 
+	componentDidMount() {
+		console.log('mounted');
+		console.log(this.props);
+		// const defaultFish = this.props.fishes[0].fish;
+		// const defaultFishKey = this.props.fishes[0].key;
+		// this.setState({ key: defaultFishKey });
+		// this.setState({ name: defaultFish.name });
+		// this.setState({ description: defaultFish.description });
+		// this.setState({ status: defaultFish.status });
+		// this.setState({ price: defaultFish.price });
+		// this.setState({ image: defaultFish.image });
+	}
+
 	renderFishToEdit = event => {
 		let fishToEditKey = event.currentTarget.value;
 		let fishToEdit = this.props.fishes.find(el => el.key === fishToEditKey)
@@ -35,7 +48,7 @@ class EditFishForm extends React.Component {
 	};
 
 	renderBasedOnInput() {
-		if (this.props.fishes.length === 0) return null;
+		if (!this.props.fishes || this.props.fishes.length === 0) return null;
 
 		return (
 			<div className='fish-edit'>
