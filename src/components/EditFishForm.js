@@ -54,7 +54,7 @@ class EditFishForm extends React.Component {
 		this.props.updateFish(this.state.key, updatedFish);
 	};
 
-	renderBasedOnInput() {
+	render() {
 		if (!this.props.fishes || this.props.fishes.length === 0) return null;
 
 		return (
@@ -101,10 +101,6 @@ class EditFishForm extends React.Component {
 				/>
 			</div>
 		);
-	}
-
-	render() {
-		return this.renderBasedOnInput();
 	}
 }
 
