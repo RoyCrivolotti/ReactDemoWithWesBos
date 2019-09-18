@@ -30,28 +30,30 @@ class EditFishForm extends React.Component {
 		image: {},
 	};
 
-	componentDidMount() {
-		if (this.props.fishes.length === 0) {
-			this.setState({ key: '' });
-			this.setState({ name: '' });
-			this.setState({ description: '' });
-			this.setState({ status: '' });
-			this.setState({ price: 0 });
-			this.setState({ image: '' });
-		}
+	setStateFromObj = propsObject => {
+		this.setState({ key: propsObject.key });
+		this.setState({ name: propsObject.name });
+		this.setState({ description: propsObject.description });
+		this.setState({ status: propsObject.status });
+		this.setState({ price: propsObject.price });
+		this.setState({ image: propsObject.image });
+	};
+
+	componentWillMount() {
+		this.setStateFromObj({
+			key: '',
+			name: '',
+			description: '',
+			status: '',
+			price: 0,
+			image: '',
+		});
 	}
 
-	UNSAFE_componentWillReceiveProps(nextProps) {
-		if (nextProps.fishes.length > 0) {
-			const defaultFish = nextProps.fishes[0].fish;
-			const defaultFishKey = nextProps.fishes[0].key;
-
-			this.setState({ key: defaultFishKey });
-			this.setState({ name: defaultFish.name });
-			this.setState({ description: defaultFish.description });
-			this.setState({ status: defaultFish.status });
-			this.setState({ price: defaultFish.price });
-			this.setState({ image: defaultFish.image });
+	componentDidMount() {
+		if (this.props.fishes.length > 0 && this.state.key.length === 0) {
+			const defaultFish = this.props.fishes[0];
+			this.setStateFromObj({ key: defaultFish.key, ...defaultFish.fish });
 		}
 	}
 
@@ -60,12 +62,7 @@ class EditFishForm extends React.Component {
 		let fishToEdit = this.props.fishes.find(el => el.key === fishToEditKey)
 			.fish;
 
-		this.setState({ key: fishToEditKey });
-		this.setState({ name: fishToEdit.name });
-		this.setState({ description: fishToEdit.description });
-		this.setState({ status: fishToEdit.status });
-		this.setState({ price: fishToEdit.price });
-		this.setState({ image: fishToEdit.image });
+		this.setStateFromObj({ key: fishToEditKey, ...fishToEdit });
 	};
 
 	handleChange = event => {
@@ -78,7 +75,7 @@ class EditFishForm extends React.Component {
 	};
 
 	render() {
-		if (!this.props.fishes || this.props.fishes.length === 0) return null;
+		if (!this.state || !this.state.key) return null;
 
 		return (
 			<div className='fish-edit'>
