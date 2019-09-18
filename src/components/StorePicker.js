@@ -1,6 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class StorePicker extends React.Component {
+	static propTypes = {
+		history: PropTypes.object.isRequired,
+	};
 	// constructor() {
 	// 	super();
 	// 	this.goToStore = this.goToStore.bind(this);
@@ -29,7 +33,14 @@ class StorePicker extends React.Component {
 				<form className='store-selector' onSubmit={this.goToStore}>
 					<h2> Hello world!</h2>
 
-					<input type='text' required placeholder='Store name' ref={this.storeNameInput} name='' id='' />
+					<input
+						type='text'
+						required
+						placeholder='Store name'
+						ref={this.storeNameInput}
+						name=''
+						id=''
+					/>
 					<button type='submit'>Visit store</button>
 				</form>
 			</>

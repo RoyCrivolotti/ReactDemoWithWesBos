@@ -1,8 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { formatPrice } from '../helpers';
 
 class EditFishForm extends React.Component {
+	static propTypes = {
+		removeFish: PropTypes.func.isRequired,
+		updateFish: PropTypes.func.isRequired,
+		fishes: PropTypes.arrayOf(
+			PropTypes.shape({
+				key: PropTypes.string,
+				fish: PropTypes.shape({
+					image: PropTypes.string,
+					name: PropTypes.string.isRequired,
+					description: PropTypes.string,
+					price: PropTypes.number.isRequired,
+					status: PropTypes.string.isRequired,
+				}),
+			}),
+		),
+	};
+
 	state = {
 		key: {},
 		name: {},
