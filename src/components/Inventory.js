@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import firebase from 'firebase';
 
 import AddFishForm from './AddFishForm';
 import EditFishForm from './EditFishForm';
 import Login from './Login';
+import { firebaseApp } from '../base';
 
 class Inventory extends React.Component {
 	static propTypes = {
@@ -22,8 +24,31 @@ class Inventory extends React.Component {
 		}),
 	};
 
-	authenticate = service => {
-		console.log(`Authenticating with ${service}`);
+	authenticate = provider => {
+		console.log(`Authenticating with '${provider}'`);
+
+		const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+		console.log(`Provider object`);
+		console.log(authProvider);
+		console.log(firebaseApp.options.apiKey);
+		firebaseApp
+			.auth()
+			.signInWithPopup(authProvider)
+			.then(this.authHandler)
+			.catch(error => {
+				console.log(error);
+				console.error(`Error code: ${error.code}`);
+				console.error(`Error message: ${error.message}`);
+			});
+	};
+
+	authHandler = async authData => {
+		console.log(`In auth handler`);
+		console.log(authData);
+
+		var token = authData.credential.accessToken;
+		var user = authData.user;
+		console.log(`Token: ${token}, user: ${user}`);
 	};
 
 	render() {
