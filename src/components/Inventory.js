@@ -5,7 +5,7 @@ import firebase from 'firebase';
 import AddFishForm from './AddFishForm';
 import EditFishForm from './EditFishForm';
 import Login from './Login';
-import { firebaseApp } from '../base';
+import base, { firebaseApp } from '../base';
 
 class Inventory extends React.Component {
 	static propTypes = {
@@ -24,35 +24,72 @@ class Inventory extends React.Component {
 		}),
 	};
 
-	authenticate = provider => {
-		console.log(`Authenticating with '${provider}'`);
+	state = {
+		uid: null,
+		owner: null,
+	};
 
+	authenticate = provider => {
 		const authProvider = new firebase.auth[`${provider}AuthProvider`]();
-		console.log(`Provider object`);
-		console.log(authProvider);
-		console.log(firebaseApp.options.apiKey);
+
 		firebaseApp
 			.auth()
 			.signInWithPopup(authProvider)
 			.then(this.authHandler)
 			.catch(error => {
-				console.log(error);
+				// console.log(error);
 				console.error(`Error code: ${error.code}`);
 				console.error(`Error message: ${error.message}`);
 			});
 	};
 
 	authHandler = async authData => {
-		console.log(`In auth handler`);
-		console.log(authData);
+		// console.log(authData);
+
+		const store = await base
+			.fetch(this.props.storeId, { context: this })
+			.catch(error => {
+				console.log(`Error: ${error.message}`);
+			});
+
+		console.log('Current store');
+		console.log(store);
+
+		if (!store.owner) {
+			base.post(`${this.props.storeId}/owner`, {
+				data: authData.user.uid,
+			});
+		}
+
+		this.setState({
+			uid: authData.user.uid,
+			owner: store.owner || authData.user.uid,
+		});
 
 		var token = authData.credential.accessToken;
 		var user = authData.user;
-		console.log(`Token: ${token}, user: ${user}`);
+		// console.log(`Token: ${token}, user: ${user}`);
+	};
+
+	logout = async () => {
+		console.log('Logging out!');
+		await firebase.auth().signOut();
+		this.setState({ uid: null });
 	};
 
 	render() {
-		return <Login authenticate={this.authenticate} />;
+		const logout = <button onClick={() => this.logout()}>Log out</button>;
+
+		if (!this.state.uid) {
+			return <Login authenticate={this.authenticate} />;
+		}
+
+		if (this.state.uid !== this.state.owner) {
+			return <h3>Sorry, you are not this store's owner</h3>;
+		}
+
+		console.log(this.props.fishes);
+
 		return (
 			<div className='inventory'>
 				<h2>Inventory</h2>
