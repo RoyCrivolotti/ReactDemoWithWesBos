@@ -55,10 +55,10 @@ class Order extends React.Component {
 								key={amount}
 								timeout={{ enter: 500, exit: 500 }}
 							>
-								<span>{amount} -&nbsp;</span>
+								<span>{amount}</span>
 							</CSSTransition>
 						</TransitionGroup>
-						{fish.name} - {formatPrice(amount * fish.price)}
+						&nbsp;- {fish.name} - {formatPrice(amount * fish.price)}
 					</span>
 					<button onClick={() => this.props.removeFromOrder(key)}>
 						<span>&#10799;</span>
