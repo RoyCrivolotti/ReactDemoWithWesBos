@@ -85,7 +85,12 @@ class Inventory extends React.Component {
 		}
 
 		if (this.state.uid !== this.state.owner) {
-			return <h3>Sorry, you are not this store's owner</h3>;
+			return (
+				<div>
+					<h3>Sorry, you are not this store's owner</h3>
+					{logout}
+				</div>
+			);
 		}
 
 		console.log(this.props.fishes);
@@ -105,6 +110,7 @@ class Inventory extends React.Component {
 				<button onClick={this.props.loadSampleFishes}>
 					Load sample fishes
 				</button>
+				{logout}
 			</div>
 		);
 	}
