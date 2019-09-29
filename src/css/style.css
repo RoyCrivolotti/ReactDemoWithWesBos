@@ -252,6 +252,14 @@ h2 {
 h3 {
   font-size: 3rem;
 }
+html {
+  overflow: scroll;
+  overflow-x: hidden;
+}
+html ::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
 header.top {
   text-align: center;
 }

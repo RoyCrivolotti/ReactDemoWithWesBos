@@ -1,6 +1,12 @@
 // Import all partials
 @require './_*.styl'
 
+html
+  overflow: scroll
+  overflow-x: hidden
+  ::-webkit-scrollbar
+    width: 0px
+    background: transparent
 
 header.top
   text-align center
@@ -8,16 +14,16 @@ header.top
     font-size 14.4rem
     line-height 0.7 // this font has a wacky baseline
     display flex
-    justify-content: center;
+    justify-content: center
 
     // This is a bunch of goofy CSS to make the logo look decent
     .ofThe
       display flex
       font-size 3rem
       color orange
-      justify-content: center;
-      align-items: center;
-      background url('images/anchor.svg') center no-repeat;
+      justify-content: center
+      align-items: center
+      background url('images/anchor.svg') center no-repeat
       background-size cover
       padding 0 1rem
       .of
@@ -57,7 +63,7 @@ header.top
   max-width:1500px
   margin 0 auto
   margin-top 5vh
-  perspective: 1000px;
+  perspective: 1000px
   transform-style preserve-3d
   & > *
     flex 1 4 auto
@@ -178,7 +184,7 @@ ul.order
   border-bottom 1px solid black
   padding-top 5px
   margin-top 2rem
-  transform translateZ(0);
+  transform translateZ(0)
 
 .menu-fish
   border-bottom 2px solid black

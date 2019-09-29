@@ -110,7 +110,9 @@ class Inventory extends React.Component {
 				<button onClick={this.props.loadSampleFishes}>
 					Load sample fishes
 				</button>
-				{logout}
+				<div>
+					{logout}
+				</div>
 			</div>
 		);
 	}
