@@ -28,32 +28,55 @@ class Inventory extends React.Component {
 		uid: null,
 		owner: null,
 	};
+	
+	componentDidMount() {
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) this.authHandler({ user });
+		});
+	}
 
 	authenticate = provider => {
 		const authProvider = new firebase.auth[`${provider}AuthProvider`]();
+		let alternativeProvider;
+
+		if (provider === 'Google') alternativeProvider = new firebase.auth.GithubAuthProvider();
+		else if (provider === 'Github') alternativeProvider = new firebase.auth.GoogleAuthProvider();
+		else return null;
 
 		firebaseApp
 			.auth()
 			.signInWithPopup(authProvider)
 			.then(this.authHandler)
 			.catch(error => {
-				// console.log(error);
-				console.error(`Error code: ${error.code}`);
-				console.error(`Error message: ${error.message}`);
+				if (error.code === 'auth/account-exists-with-different-credential') {
+					firebase
+					.auth()
+					.signInWithPopup(alternativeProvider)
+					.then(this.authHandler)
+					.then(() => {
+						firebase.auth().currentUser.linkWithPopup(authProvider);
+						console.log(`Logged in with ${alternativeProvider} and linked your account to ${authProvider} so that you can now sign in with either directly!`);
+					})
+					.catch(this.handleAuthError);
+				}
+				
+				else this.handleAuthError(error);
 			});
 	};
 
-	authHandler = async authData => {
-		// console.log(authData);
+	handleAuthError = error => {
+		console.error(`Error code: ${error.code}`);
+		console.error(`Error message: ${error.message}`);
 
+		throw error;
+	}
+
+	authHandler = async authData => {
 		const store = await base
 			.fetch(this.props.storeId, { context: this })
 			.catch(error => {
 				console.log(`Error: ${error.message}`);
 			});
-
-		console.log('Current store');
-		console.log(store);
 
 		if (!store.owner) {
 			base.post(`${this.props.storeId}/owner`, {
@@ -65,10 +88,6 @@ class Inventory extends React.Component {
 			uid: authData.user.uid,
 			owner: store.owner || authData.user.uid,
 		});
-
-		var token = authData.credential.accessToken;
-		var user = authData.user;
-		// console.log(`Token: ${token}, user: ${user}`);
 	};
 
 	logout = async () => {
